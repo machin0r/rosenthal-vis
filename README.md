@@ -1,4 +1,4 @@
-# Simple Rosenthal Melt Pool
+# Simple Rosenthal Melt Pool Visualiser
 
 Interactive visualisation of the Rosenthal analytical solution for laser powder bed fusion (L-PBF) melt pools. Adjust process parameters with sliders and see how the melt pool geometry, thermal gradients, and defect risk indicators respond in real time.
 
