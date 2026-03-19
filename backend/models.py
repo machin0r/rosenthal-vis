@@ -17,6 +17,8 @@ class ComputeRequest(BaseModel):
     diffusivity: float = Field(..., gt=0, description="Thermal diffusivity in m²/s")
     liquidus: float = Field(..., gt=0, description="Liquidus temperature in Kelvin")
     preheat: float = Field(..., gt=0, description="Preheat/ambient temperature in Kelvin")
+    layer_thickness_um: float = Field(default=40.0, gt=0, description="Layer thickness in micrometers")
+    hatch_spacing_um: float = Field(default=100.0, gt=0, description="Hatch spacing in micrometers")
     grid: GridParams = Field(default_factory=GridParams)
 
 
@@ -58,7 +60,14 @@ class MeltPoolMetrics(BaseModel):
     G_over_R: float
 
 
+class DefectRisks(BaseModel):
+    keyholing: bool
+    lack_of_fusion: bool
+    balling: bool
+
+
 class ComputeResponse(BaseModel):
     temperature_field: TemperatureField
     melt_pool: MeltPoolMetrics
     cross_sections: CrossSections
+    defect_risks: DefectRisks
