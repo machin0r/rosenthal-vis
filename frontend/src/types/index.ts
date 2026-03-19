@@ -8,6 +8,8 @@ export interface Parameters {
   diffusivity: number    // mm²/s   1–15      (converted to m²/s for API)
   liquidus: number       // °C      800–1700  (converted to K for API)
   preheat: number        // °C      20–500    (converted to K for API)
+  layer_thickness: number // μm     20–100
+  hatch_spacing: number   // μm     50–200
 }
 
 export interface ParameterMeta {
@@ -51,6 +53,8 @@ export interface ComputeRequest {
   diffusivity: number    // m²/s
   liquidus: number       // K
   preheat: number        // K
+  layer_thickness_um: number
+  hatch_spacing_um: number
   grid: GridParams
 }
 
@@ -87,6 +91,12 @@ export interface MeltPoolMetrics {
   G_over_R: number
 }
 
+export interface DefectRisks {
+  keyholing: boolean
+  lack_of_fusion: boolean
+  balling: boolean
+}
+
 export interface ComputeResponse {
   temperature_field: TemperatureField
   melt_pool: MeltPoolMetrics
@@ -94,4 +104,5 @@ export interface ComputeResponse {
     xz_plane: CrossSection
     xy_plane: PlanView
   }
+  defect_risks: DefectRisks
 }

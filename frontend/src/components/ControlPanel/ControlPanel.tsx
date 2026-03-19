@@ -75,16 +75,15 @@ export function ControlPanel({
           <span className="text-text-muted" style={{ fontSize: '11px' }}>J/mm³</span>
         </div>
         <p className="text-text-muted mt-1 leading-snug" style={{ fontSize: '10px' }}>
-          E = P / (v · h · t) — using default h=0.1mm, t=0.04mm
+          E = P / (v · h · t)
         </p>
       </div>
     </aside>
   )
 }
 
-/** Rough volumetric energy density estimate (hatch=0.1mm, layer=0.04mm) */
 function computeED(p: Parameters): number {
-  const hatch = 0.1  // mm
-  const layer = 0.04 // mm
+  const hatch = p.hatch_spacing / 1000  // μm → mm
+  const layer = p.layer_thickness / 1000 // μm → mm
   return p.power / (p.speed * hatch * layer)
 }

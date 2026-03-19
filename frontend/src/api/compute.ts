@@ -18,6 +18,8 @@ function toApiRequest(params: Parameters): ComputeRequest {
     diffusivity:  params.diffusivity / 1e6,     // mm²/s → m²/s
     liquidus:     params.liquidus + 273.15,     // °C → K
     preheat:      params.preheat + 273.15,      // °C → K
+    layer_thickness_um: params.layer_thickness,
+    hatch_spacing_um:   params.hatch_spacing,
     grid:         DEFAULT_GRID,
   }
 }

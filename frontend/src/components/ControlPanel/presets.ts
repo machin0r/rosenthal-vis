@@ -142,4 +142,28 @@ export const PARAMETER_META: ParameterMeta[] = [
     tooltip:
       'Starting temperature of the powder bed before the laser passes. Preheating reduces thermal gradients and residual stress. Some systems preheat to 100–200°C.',
   },
+  {
+    key: 'layer_thickness',
+    label: 'Layer Thickness',
+    symbol: 't',
+    unit: 'μm',
+    min: 20,
+    max: 100,
+    step: 5,
+    defaultValue: 40,
+    tooltip:
+      'Thickness of each powder layer. If melt pool depth is less than this, lack-of-fusion defects can occur. Typical LPBF range: 20–100 μm.',
+  },
+  {
+    key: 'hatch_spacing',
+    label: 'Hatch Spacing',
+    symbol: 'h',
+    unit: 'μm',
+    min: 50,
+    max: 200,
+    step: 5,
+    defaultValue: 100,
+    tooltip:
+      'Distance between adjacent scan tracks. If melt pool width is less than this, lack-of-fusion porosity appears between tracks. Typical range: 50–200 μm.',
+  },
 ]
