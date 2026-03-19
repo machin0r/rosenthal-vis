@@ -21,7 +21,7 @@ export default function App() {
         />
       }
       main={
-        <SketchCanvas data={data} loading={loading} />
+        <SketchCanvas data={data} loading={loading} hatchSpacing={params.hatch_spacing} />
       }
       footer={
         <footer

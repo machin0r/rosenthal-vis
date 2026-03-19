@@ -7,6 +7,7 @@ import {
   MELT_POOL_DEPTH_FILL,
   PENCIL_COLOR,
   PENCIL_LIGHT,
+  PENCIL_FAINT,
   STROKE_WIDTH,
   STROKE_WIDTH_THIN,
   WOBBLE_AMP,
@@ -41,6 +42,12 @@ export function renderMeltPool(
 
   // Ripple effect: modulate wobble amplitude
   const rippleAmp = WOBBLE_AMP + Math.sin(time * 2.5) * 0.6
+
+  // --- Adjacent hatch tracks (ghost ellipses) ---
+  const hatchW = dims.hatchSpacing * scaleF
+  if (hatchW > 0) {
+    renderAdjacentTracks(ctx, config, halfL, halfW, hatchW, rippleAmp)
+  }
 
   // --- Depth profile (visible side) ---
   renderDepthProfile(ctx, config, halfL, halfW, depthW, rippleAmp)
@@ -172,4 +179,57 @@ function renderDepthProfile(
   ctx.lineWidth = STROKE_WIDTH
   ctx.lineCap = 'round'
   ctx.stroke()
+}
+
+/**
+ * Draw faint ghost ellipses for adjacent hatch tracks at ±hatch spacing,
+ * showing overlap (or gaps) with the primary melt pool.
+ */
+function renderAdjacentTracks(
+  ctx: CanvasRenderingContext2D,
+  config: IsometricConfig,
+  halfL: number,
+  halfW: number,
+  hatchW: number,
+  wobbleAmp: number
+) {
+  // Draw one ghost track on each side (±hatch spacing in Y)
+  const offsets = [-hatchW, hatchW]
+
+  for (let idx = 0; idx < offsets.length; idx++) {
+    const yOffset = offsets[idx]
+    const ghostCenter = isoProject(0, yOffset, 0, config)
+    const ghostRight = isoProject(halfL, yOffset, 0, config)
+    const ghostTop = isoProject(0, yOffset + halfW, 0, config)
+
+    const grx = Math.sqrt((ghostRight.x - ghostCenter.x) ** 2 + (ghostRight.y - ghostCenter.y) ** 2)
+    const gry = Math.sqrt((ghostTop.x - ghostCenter.x) ** 2 + (ghostTop.y - ghostCenter.y) ** 2)
+
+    const angle = Math.atan2(ghostRight.y - ghostCenter.y, ghostRight.x - ghostCenter.x)
+
+    ctx.save()
+    ctx.globalAlpha = 0.6
+    ctx.translate(ghostCenter.x, ghostCenter.y)
+    ctx.rotate(angle)
+
+    sketchEllipse(ctx, 0, 0, grx, gry, {
+      amplitude: wobbleAmp * 0.6,
+      seed: 200 + idx * 50,
+      fillColor: undefined,
+      color: PENCIL_FAINT,
+      strokeWidth: STROKE_WIDTH_THIN,
+    })
+
+    // Light dashed center line for the hatch track
+    ctx.setLineDash([4, 6])
+    ctx.beginPath()
+    ctx.moveTo(-grx, 0)
+    ctx.lineTo(grx, 0)
+    ctx.strokeStyle = PENCIL_FAINT
+    ctx.lineWidth = STROKE_WIDTH_THIN
+    ctx.stroke()
+    ctx.setLineDash([])
+
+    ctx.restore()
+  }
 }

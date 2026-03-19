@@ -18,7 +18,7 @@ export class AnimationState {
   private duration: number = LERP_DURATION_MS / 1000
 
   constructor(initial?: SketchDimensions) {
-    const def = initial ?? { length: 200, width: 100, depth: 50 }
+    const def = initial ?? { length: 200, width: 100, depth: 50, hatchSpacing: 100 }
     this.from = { ...def }
     this.to = { ...def }
   }
@@ -43,6 +43,7 @@ export class AnimationState {
       length: lerpVal(this.from.length, this.to.length, e),
       width: lerpVal(this.from.width, this.to.width, e),
       depth: lerpVal(this.from.depth, this.to.depth, e),
+      hatchSpacing: lerpVal(this.from.hatchSpacing, this.to.hatchSpacing, e),
     }
   }
 }

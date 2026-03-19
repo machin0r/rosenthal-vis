@@ -1,7 +1,8 @@
 export interface SketchDimensions {
-  length: number  // um
-  width: number   // um
-  depth: number   // um
+  length: number        // um
+  width: number         // um
+  depth: number         // um
+  hatchSpacing: number  // um
 }
 
 export interface ScreenPoint {

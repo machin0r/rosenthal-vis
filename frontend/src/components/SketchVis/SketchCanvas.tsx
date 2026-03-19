@@ -7,9 +7,10 @@ import { createSparks, updateSparks } from './renderers/Sparks'
 interface SketchCanvasProps {
   data: ComputeResponse | null
   loading: boolean
+  hatchSpacing: number // μm
 }
 
-export function SketchCanvas({ data, loading }: SketchCanvasProps) {
+export function SketchCanvas({ data, loading, hatchSpacing }: SketchCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animRef = useRef(new AnimationState())
   const rendererRef = useRef(new SceneRenderer())
@@ -27,9 +28,10 @@ export function SketchCanvas({ data, loading }: SketchCanvasProps) {
       length: mp.length_um,
       width: mp.width_um,
       depth: mp.depth_um,
+      hatchSpacing,
     })
     defectRisksRef.current = data.defect_risks ?? null
-  }, [data])
+  }, [data, hatchSpacing])
 
   // Handle canvas sizing
   const resizeCanvas = useCallback(() => {
