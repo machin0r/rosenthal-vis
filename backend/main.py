@@ -5,8 +5,8 @@ import numpy as np
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from models import ComputeRequest, ComputeResponse, TemperatureField, MeltPoolMetrics, CrossSections, CrossSection, PlanView
-from rosenthal import PhysicsParams, compute_temperature_field, compute_metrics, get_cross_sections
+from models import ComputeRequest, ComputeResponse, TemperatureField, MeltPoolMetrics, CrossSections, CrossSection, PlanView, DefectRisks
+from rosenthal import PhysicsParams, compute_temperature_field, compute_metrics, compute_defect_risks, get_cross_sections
 from materials import MATERIALS
 
 app = FastAPI(
@@ -60,6 +60,7 @@ def compute(req: ComputeRequest):
         raise HTTPException(status_code=422, detail=f"Computation error: {e}")
 
     metrics = compute_metrics(T, x, y, z, params)
+    defect_risks = compute_defect_risks(metrics, req.layer_thickness_um, req.hatch_spacing_um)
     T_xz, T_xy = get_cross_sections(T, x, y, z)
 
     elapsed_ms = (time.perf_counter() - t0) * 1000
@@ -77,6 +78,7 @@ def compute(req: ComputeRequest):
             z=z.tolist(),
         ),
         melt_pool=MeltPoolMetrics(**metrics),
+        defect_risks=DefectRisks(**defect_risks),
         cross_sections=CrossSections(
             xz_plane=CrossSection(
                 data=T_xz.astype(np.float32).flatten().tolist(),
