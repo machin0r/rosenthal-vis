@@ -202,7 +202,7 @@ def _compute_cooling_rate(
         np.array([1e-9]),
         p,
     )
-    dT_dx = float((T_fwd - T_bwd) / (2 * dx))
+    dT_dx = ((T_fwd - T_bwd) / (2 * dx)).item()
     cooling_rate = abs(p.speed * dT_dx)
     return cooling_rate
 
@@ -234,20 +234,20 @@ def _compute_G_and_R(
     # Evaluate gradient at trailing edge
     eps = dx
     # ∂T/∂x
-    T_xp = float(compute_temperature(np.array([x_trail + eps]), np.array([0.0]), np.array([1e-9]), p))
-    T_xm = float(compute_temperature(np.array([x_trail - eps]), np.array([0.0]), np.array([1e-9]), p))
+    T_xp = compute_temperature(np.array([x_trail + eps]), np.array([0.0]), np.array([1e-9]), p).item()
+    T_xm = compute_temperature(np.array([x_trail - eps]), np.array([0.0]), np.array([1e-9]), p).item()
     dT_dx = (T_xp - T_xm) / (2 * eps)
 
     # ∂T/∂y
     eps_y = max(y[1] - y[0], 1e-8) if len(y) > 1 else 1e-6
-    T_yp = float(compute_temperature(np.array([x_trail]), np.array([eps_y]), np.array([1e-9]), p))
-    T_ym = float(compute_temperature(np.array([x_trail]), np.array([-eps_y]), np.array([1e-9]), p))
+    T_yp = compute_temperature(np.array([x_trail]), np.array([eps_y]), np.array([1e-9]), p).item()
+    T_ym = compute_temperature(np.array([x_trail]), np.array([-eps_y]), np.array([1e-9]), p).item()
     dT_dy = (T_yp - T_ym) / (2 * eps_y)
 
     # ∂T/∂z — evaluate just below surface
     eps_z = max(z[1] - z[0], 1e-8) if len(z) > 1 else 1e-6
-    T_zp = float(compute_temperature(np.array([x_trail]), np.array([0.0]), np.array([eps_z * 2]), p))
-    T_zm = float(compute_temperature(np.array([x_trail]), np.array([0.0]), np.array([1e-9]), p))
+    T_zp = compute_temperature(np.array([x_trail]), np.array([0.0]), np.array([eps_z * 2]), p).item()
+    T_zm = compute_temperature(np.array([x_trail]), np.array([0.0]), np.array([1e-9]), p).item()
     dT_dz = (T_zp - T_zm) / eps_z
 
     grad = np.array([dT_dx, dT_dy, dT_dz])
