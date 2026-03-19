@@ -1,9 +1,12 @@
 import time
 import base64
+from pathlib import Path
 
 import numpy as np
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from models import ComputeRequest, ComputeResponse, TemperatureField, MeltPoolMetrics, CrossSections, CrossSection, PlanView, DefectRisks
 from rosenthal import PhysicsParams, compute_temperature_field, compute_metrics, compute_defect_risks, get_cross_sections
@@ -96,6 +99,19 @@ def compute(req: ComputeRequest):
     )
 
 
+# Serve built frontend in production (Docker) — skipped during local dev
+_static_dir = Path(__file__).parent / "static"
+if _static_dir.is_dir():
+    app.mount("/assets", StaticFiles(directory=_static_dir / "assets"), name="assets")
+
+    @app.get("/{full_path:path}")
+    def serve_spa(full_path: str):
+        file = _static_dir / full_path
+        if file.is_file():
+            return FileResponse(file)
+        return FileResponse(_static_dir / "index.html")
+
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
