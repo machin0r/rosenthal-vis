@@ -4,7 +4,9 @@ import { renderMeltPool } from './renderers/MeltPool'
 import { renderLaserBeam } from './renderers/LaserBeam'
 import { renderSparks } from './renderers/Sparks'
 import { renderAnnotations } from './renderers/Annotations'
+import { renderDefectBadges } from './renderers/DefectBadges'
 import type { SketchDimensions, Spark } from './types'
+import type { DefectRisks } from '../../types'
 
 export class SceneRenderer {
   render(
@@ -13,7 +15,8 @@ export class SceneRenderer {
     height: number,
     dims: SketchDimensions,
     sparks: Spark[],
-    time: number
+    time: number,
+    defectRisks: DefectRisks | null,
   ): void {
     // Clear to white
     ctx.clearRect(0, 0, width, height)
@@ -50,5 +53,10 @@ export class SceneRenderer {
 
     // 6. Laser beam (on top)
     renderLaserBeam(ctx, config, time)
+
+    // 7. Defect risk badges (screen-space overlay)
+    if (defectRisks) {
+      renderDefectBadges(ctx, defectRisks, time)
+    }
   }
 }

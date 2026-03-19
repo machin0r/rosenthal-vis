@@ -1,5 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react'
-import type { ComputeResponse } from '../../types'
+import type { ComputeResponse, DefectRisks } from '../../types'
 import { AnimationState } from './AnimationState'
 import { SceneRenderer } from './SceneRenderer'
 import { createSparks, updateSparks } from './renderers/Sparks'
@@ -17,6 +17,7 @@ export function SketchCanvas({ data, loading }: SketchCanvasProps) {
   const rafRef = useRef<number>(0)
   const prevTimeRef = useRef<number>(0)
   const timeRef = useRef<number>(0)
+  const defectRisksRef = useRef<DefectRisks | null>(null)
 
   // Feed new data to animation state
   useEffect(() => {
@@ -27,6 +28,7 @@ export function SketchCanvas({ data, loading }: SketchCanvasProps) {
       width: mp.width_um,
       depth: mp.depth_um,
     })
+    defectRisksRef.current = data.defect_risks ?? null
   }, [data])
 
   // Handle canvas sizing
@@ -76,7 +78,7 @@ export function SketchCanvas({ data, loading }: SketchCanvasProps) {
       const h = canvas.height / dpr
 
       const dims = animRef.current.getCurrent()
-      rendererRef.current.render(ctx, w, h, dims, sparksRef.current, timeRef.current)
+      rendererRef.current.render(ctx, w, h, dims, sparksRef.current, timeRef.current, defectRisksRef.current)
 
       rafRef.current = requestAnimationFrame(loop)
     }
