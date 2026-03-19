@@ -64,11 +64,11 @@ export const PARAMETER_META: ParameterMeta[] = [
     symbol: 'P',
     unit: 'W',
     min: 50,
-    max: 500,
+    max: 1000,
     step: 5,
     defaultValue: 200,
     tooltip:
-      'Energy delivered by the laser per second. Higher power melts more material but can cause keyholing or excessive vaporization. Typical LPBF range: 50–500 W.',
+      'Energy delivered by the laser per second. Higher power melts more material but can cause keyholing or excessive vaporization. Typical LPBF range: 50–1000 W.',
   },
   {
     key: 'speed',
@@ -76,11 +76,11 @@ export const PARAMETER_META: ParameterMeta[] = [
     symbol: 'v',
     unit: 'mm/s',
     min: 100,
-    max: 2000,
+    max: 3000,
     step: 10,
     defaultValue: 800,
     tooltip:
-      'How fast the laser moves across the powder bed. Faster speeds reduce heat input, creating smaller melt pools. Typical LPBF range: 200–2000 mm/s.',
+      'How fast the laser moves across the powder bed. Faster speeds reduce heat input, creating smaller melt pools. Typical LPBF range: 200–3000 mm/s.',
   },
   {
     key: 'absorptivity',
@@ -148,22 +148,22 @@ export const PARAMETER_META: ParameterMeta[] = [
     symbol: 't',
     unit: 'μm',
     min: 20,
-    max: 100,
+    max: 250,
     step: 5,
     defaultValue: 40,
     tooltip:
-      'Thickness of each powder layer. If melt pool depth is less than this, lack-of-fusion defects can occur. Typical LPBF range: 20–100 μm.',
+      'Thickness of each powder layer. If melt pool depth is less than this, lack-of-fusion defects can occur. Typical LPBF range: 20–250 μm.',
   },
   {
     key: 'hatch_spacing',
     label: 'Hatch Spacing',
     symbol: 'h',
     unit: 'μm',
-    min: 50,
-    max: 200,
+    min: 25,
+    max: 400,
     step: 5,
     defaultValue: 100,
     tooltip:
-      'Distance between adjacent scan tracks. If melt pool width is less than this, lack-of-fusion porosity appears between tracks. Typical range: 50–200 μm.',
+      'Distance between adjacent scan tracks. If melt pool width is less than this, lack-of-fusion porosity appears between tracks. Typical range: 25–400 μm.',
   },
 ]
