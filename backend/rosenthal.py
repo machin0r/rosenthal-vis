@@ -265,6 +265,34 @@ def _compute_G_and_R(
     return G, R_s
 
 
+def compute_defect_risks(
+    metrics: dict,
+    layer_thickness_um: float,
+    hatch_spacing_um: float,
+) -> dict:
+    """
+    Evaluate defect risk indicators from melt pool metrics.
+
+    Keyholing:      aspect ratio (depth / half-width) > 1.5
+    Lack of fusion: pool depth < layer thickness OR pool width < hatch spacing
+    Balling:        length / width > π  (Plateau–Rayleigh instability)
+    """
+    depth_um = metrics["depth_um"]
+    width_um = metrics["width_um"]
+    length_um = metrics["length_um"]
+    aspect_ratio = metrics["aspect_ratio"]
+
+    keyholing = aspect_ratio > 1.5
+    lack_of_fusion = (depth_um < layer_thickness_um) or (width_um < hatch_spacing_um)
+    balling = (length_um / width_um > np.pi) if width_um > 0 else False
+
+    return {
+        "keyholing": bool(keyholing),
+        "lack_of_fusion": bool(lack_of_fusion),
+        "balling": bool(balling),
+    }
+
+
 def get_cross_sections(
     T: np.ndarray,
     x: np.ndarray,
