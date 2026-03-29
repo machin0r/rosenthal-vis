@@ -22,7 +22,7 @@ jobs:
         run: uv sync
 
       - name: Verify imports
-        run: uv run python -c "from backend.main import app; print('Backend OK')"
+        run: PYTHONPATH=backend uv run python -c "from main import app; print('Backend OK')"
 
   frontend:
     runs-on: ubuntu-latest
