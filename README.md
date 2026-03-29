@@ -2,6 +2,7 @@
 
 Interactive visualisation of the Rosenthal analytical solution for laser powder bed fusion (L-PBF) melt pools. Adjust process parameters with sliders and see how the melt pool geometry, thermal gradients, and defect risk indicators respond in real time.
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open-64ffda)](https://rosenthal.machinor.systems/)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688)
 ![React](https://img.shields.io/badge/React-18-61DAFB)
